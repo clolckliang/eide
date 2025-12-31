@@ -1,12 +1,10 @@
 {
     "eide.bar.operations": "Operations",
     "eide.bar.projects": "EIDE Projects",
-    
     "eide.item.copy": "Copy Value",
     "eide.item.modify": "Modify",
     "eide.item.remove": "Remove",
     "eide.item.open": "Open",
-
     "eide.function.show.uuid": "Show UUID",
     "eide.function.convert.keil.to.sdcc": "Convert Keil_C51 Registers To SDCC Format",
     "eide.function.reload.jlink.dev.list": "Reload JLink Devices List",
@@ -14,7 +12,6 @@
     "eide.function.reinstall.binaries": "Reinstall eide binaries",
     "eide.function.gen_clang_format": "Create new .clang-format template file",
     "eide.function.open_libs.yml": "Open Libs Generator Configuration",
-
     "eide.project.show_project_vars": "Show All Project Variables",
     "eide.project.save": "Save Project",
     "eide.project.refresh": "Refresh",
@@ -34,24 +31,19 @@
     "eide.project.generate_builder_params": "Generate builder.params",
     "eide.project.debug.start": "Start Debugging",
     "eide.project.debug.start.attach": "Start Debugging (attach)",
-
     "eide.prj.menus.main.static-check": "Static Check",
     "eide.prj.menus.sub.static-check.cppcheck": "Run Cppcheck",
     "eide.prj.menus.sub.static-check.clear": "Clear Diagnostic Informations",
-
     "eide.prj.menus.main.export": "Export As ...",
     "eide.project.export.template": "Eide Project Template",
     "eide.project.export.keil": "Keil Project",
     "eide.project.export.makefile": "GNU Makefile",
-
     "eide.workspace.build": "Build All",
     "eide.workspace.rebuild": "Rebuild All",
     "eide.workspace.open.config": "Open Workspace Configuration",
     "eide.workspace.make.template": "Export Workspace To Eide Template",
-
     "eide.operation.open.history": "History Records",
     "eide.operation.clear.history": "Clear History Records",
-
     "eide.explorer.root.add.folder": "Add Source Folder",
     "eide.explorer.root.remove.folder": "Remove Source Folder",
     "eide.explorer.root.refresh.folder": "Refresh",
@@ -74,40 +66,31 @@
     "eide.explorer.file.compile": "Compile",
     "eide.explorer.file.modify.extraArgs": "Show/Modify Compiler Options",
     "eide.explorer.folder.modify.extraArgs": "Show/Modify Compiler Options",
-
     "eide.source.show_cmsis_config_wizard": "CMSIS Configuration Wizard",
     "eide.source.show.disassembly": "Show Disassembly",
-
     "eide.package.install": "Install CMSIS Chip Package",
     "eide.package.install.cmsis": "Install CMSIS Header Files",
     "eide.package.remove": "Uninstall Chip Support Package",
     "eide.package.select.device": "Select Device",
     "eide.package.comp.install": "Install Component",
     "eide.package.comp.uninstall": "Uninstall Component",
-
     "eide.builder.switch": "Select Toolchain",
     "eide.builder.setup-toochain": "Setup Toolchain",
     "eide.builder.setup-toolchain-prefix": "Setup Toolchain Prefix",
-
     "eide.flash.switch": "Select Flasher",
     "eide.flash.gen.dbgconf": "Generate Debugger Configuration",
     "eide.flash.fetch-shell-flasher": "Install Shell Flasher Script From Remote Repository",
-
     "eide.deps.include.show": "Display All Include Paths",
     "eide.deps.include.add": "Add Include Path",
     "eide.deps.inclib.show": "Display All Library Folders",
     "eide.deps.inclib.add": "Add Library Folder",
     "eide.deps.macro.show": "Display All Macros",
     "eide.deps.macro.add": "Add Macro",
-
     "settings.msys.enable": "Determine whether to enable the built-in **MSYS environment and tools** on Win32 platform",
-
     "settings.enable.telemetry": "Enable telemetry for extension. We will collect information from the logs to help improve the functionality of this extension.",
-
     "settings.builder.jobs": "The number of threads when build",
     "settings.builder.extraCommandLine": "Append additional commandline when invoke unify_builder",
     "settings.builder.presetEnvVars": "Preset Global Environment Variables when build project",
-    
     "settings.enable.ccache": "Determine whether to enable [ccache](https://ccache.dev/) used to speed up compilation of large projects",
     "settings.option.show.toolbar.in.editer.title": "Displays some toolbars in the editor title",
     "settings.option.show.statusbar": "Displays toolbar icons in the status bar",
@@ -119,12 +102,10 @@
     "settings.option.show.source.references": "Show c/c++ header references for source file",
     "settings.option.mapView.parser.depth": "The depth limit of the obj file path when *.map.view is displayed. Obj files larger than this depth are ignored. Set 0 means no limit.",
     "settings.option.show.output.files": "Show output files in project resource explorer",
-    
     "settings.repo.use.proxy": "Use proxy to improve network speed for github (experimental function)",
     "settings.template.repo.url": "Public github template repository url, format: `<user_name>`/`<repository_name>`/contents/`<directory_path>`",
     "settings.cmsispack.repo.url": "Public github cmsis-pack repository url, format: `<user_name>`/`<repository_name>`/contents/`<directory_path>`",
     "settings.template.repo.github_token": "Specify a Github personal access token for a **private template repository** so that eide can access the repository and download templates from it.",
-
     "settings.serial.def.port": "Default port name",
     "settings.serial.show.toolbar": "Show serialport status bar",
     "settings.serial.use.unix.lf": "Use Unix New Line Char",
@@ -132,40 +113,29 @@
     "settings.serial.data.width": "SerialPort Data Bits width",
     "settings.serial.parity": "SerialPort Parity bit",
     "settings.serial.stop.bits": "SerialPort Stop Bits",
-
     "settings.keilc51.ini": "Keil C51 `UV4.exe` or `TOOLS.INI` file path [`example: C:\\Keil_v5\\UV4\\UV4.exe`]",
     "settings.iar.stm8.install.folder": "IAR for STM8 install directory [`example: D:\\IAR`]",
     "settings.iar.arm.toolchain.install.folder": "IAR ARM C/C++ Compiler root directory [`example: D:\\IAR_ARM\\arm`]",
     "settings.sdcc.install.folder": "SDCC install folder [`example: C:\\Program Files (x86)\\SDCC`]",
-
     "settings.arm.armcc5.install.folder": "Armcc v5 toolchain install directory [`example: D:\\ac5`]",
     "settings.arm.armcc6.install.folder": "Armcc v6 toolchain install directory [`example: D:\\ac6`]",
     "settings.arm.gcc.install.folder": "GCC for ARM toolchain install directory [`example: D:\\arm-gcc\\8 2019-q3-update`]",
     "settings.arm.gcc.prefix": "ARM GCC toolchain prefix [`example: arm-none-eabi-`]",
-
     "settings.arm.llvm.install.folder": "Install directory of 'LLVM Embedded Toolchain For Arm'",
-
     "settings.armcc.ini": "Keil MDK-ARM `UV4.exe` or `TOOLS.INI` file path [`example: C:\\Keil_v5\\UV4\\UV4.exe`]",
     "settings.armcc.convert.axf": "Convert `.axf` to `.elf` for ARMCC compiler",
-
     "settings.mips.gcc.install.folder": "MIPS toolchain install folder [`example: D:\\mips-mti-elf-mingw64`]",
     "settings.mips.gcc.prefix": "MIPS toolchain prefix, like: `mips-mti-elf-`",
-
     "settings.riscv.gcc.install.folder": "RISC-V toolchain install folder [`example: D:\\xpack-riscv-none-embed-gcc-8.3.0-2.3`]",
     "settings.riscv.gcc.prefix": "RISC-V toolchain prefix, like: `riscv-none-embed-`",
-
     "settings.jlink.install.folder": "JLink install directory [`example: C:\\Program Files (x86)\\SEGGER\\JLink`]",
     "settings.jlink.device.xml": "JLinkDevices.xml File Path",
-
     "settings.openocd.install.folder": "OpenOCD.exe path [`example: D:\\OpenOCD\\bin\\openocd.exe`]",
     "settings.stlink.install.folder": "`STM32_Programmer_CLI.exe` or `ST-LINK Utility: ST-LINK_CLI.exe` path",
     "settings.stvp.path": "STVP: `STVP_CmdLine.exe` path",
-
     "settings.cppcheck.exec.path": "cppcheck.exe executable path",
-
     "settings.option.disable.editor_context.menu": "Disable editor context menu",
     "settings.option.disable.explorer_context.menu": "Disable explorer context menu",
-
     "string.eide.startup.walkthroughs": "Embedded IDE Startup",
     "string.eide.startup.walkthroughs.detail": "We'll show you how to get started with Embedded IDE.",
     "string.eide.setup.toolchain": "Setup Toolchain",
@@ -174,6 +144,12 @@
     "string.eide.start_project.detail": "Now, We can create a project !\n[Create Project](command:eide.operation.new_project)\nor import a project !\n[Import Project](command:eide.operation.import_project)",
     "string.eide.open_docs": "Learn More",
     "string.eide.open_docs.detail": "Click the link will open the home page that may help you learn more about usage.\n[Embedded IDE](https://em-ide.com/)",
-
-    "string.eide.project.welcome": "No eide projects in this workspace !\n[Open Project](command:eide.operation.open_project)\n[New Project](command:eide.operation.new_project)\n[Import Project](command:eide.operation.import_project)"
+    "string.eide.project.welcome": "No eide projects in this workspace !\n[Open Project](command:eide.operation.open_project)\n[New Project](command:eide.operation.new_project)\n[Import Project](command:eide.operation.import_project)",
+    "settings.cmake.executable.path": "CMAKE executable path (use 'cmake' if in system PATH)",
+    "settings.cmake.default.build.dir": "Default CMAKE build directory name for generating compile_commands.json",
+    "settings.cmake.toolchain.args": "Additional CMAKE toolchain arguments (e.g. -G Ninja)",
+    "settings.cmake.build.type": "CMAKE build type (Debug, Release ...)",
+    "settings.cmake.generator": "CMAKE generator (e.g. Ninja, MinGW Makefiles ...)",
+    "settings.cmake.make.program": "CMAKE generator make program path (e.g. /usr/bin/ninja)",
+    "eide.project.cmake.refresh": "Refresh from CMakeLists.txt"
 }

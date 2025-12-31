@@ -1,25 +1,25 @@
 /*
-	MIT License
+    MIT License
 
-	Copyright (c) 2019 github0null
+    Copyright (c) 2019 github0null
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included in all
-	copies or substantial portions of the Software.
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
 */
 
 import * as vscode from 'vscode';
@@ -840,6 +840,41 @@ export const view_str$operation$create_prj_done = [
 export const view_str$operation$import_sel_out_folder = [
     '是否与原有的 KEIL 项目共存于同一目录下，如果选择 "No"，你需要为 EIDE 项目指定存放位置 ！',
     'Make eide project coexist with the Keil project in the same directory ? If you choose "No", you need to specify a folder to store the eide project !'
+][langIndex];
+
+export const view_str$operation$import_cmake_project = [
+    'CMAKE 项目',
+    'CMAKE Project'
+][langIndex];
+
+export const view_str$operation$import_cmake_detail = [
+    '导入 CMAKE 项目 (需要先生成 compile_commands.json)',
+    'Import CMAKE Projects (requires compile_commands.json)'
+][langIndex];
+
+export const view_str$operation$cmake_no_compile_commands = [
+    '未找到 compile_commands.json，是否自动生成？',
+    'compile_commands.json not found. Generate automatically?'
+][langIndex];
+
+export const view_str$operation$cmake_generating = [
+    '正在生成 compile_commands.json ...',
+    'Generating compile_commands.json ...'
+][langIndex];
+
+export const view_str$operation$cmake_generate_failed = [
+    '生成 compile_commands.json 失败',
+    'Failed to generate compile_commands.json'
+][langIndex];
+
+export const view_str$operation$cmake_not_found = [
+    `未找到 CMAKE！请检查 CMAKE 是否已安装并配置到系统 PATH 中，或在设置中指定 CMAKE 路径`,
+    `CMAKE not found! Please ensure CMAKE is installed and in system PATH, or configure the path in settings`
+][langIndex];
+
+export const view_str$operation$cmake_refresh_done = [
+    '项目已成功刷新',
+    'Project refreshed successfully'
 ][langIndex];
 
 export const view_str$operation$create_empty_project = [

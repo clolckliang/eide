@@ -49,7 +49,9 @@ import {
     view_str$prompt$requestAndActivateLicence,
     view_str$operation$empty_mips_prj,
     view_str$operation$onlineHelp,
-    view_str$operation$onlineHelpTooltip
+    view_str$operation$onlineHelpTooltip,
+    view_str$operation$import_cmake_project,
+    view_str$operation$import_cmake_detail
 } from './StringTable';
 import { CreateOptions, ImportOptions, ProjectType } from './EIDETypeDefine';
 import { File } from '../lib/node-utility/File';
@@ -544,6 +546,11 @@ export class OperationExplorer {
                 label: 'Eclipse',
                 description: 'embedded gcc projects',
                 detail: `Import Eclipse Projects`
+            },
+            {
+                label: view_str$operation$import_cmake_project,
+                description: 'arm, risc-v, any gcc projects',
+                detail: view_str$operation$import_cmake_detail
             }
         ], { placeHolder: `Select Project Type` });
 
@@ -567,7 +574,7 @@ export class OperationExplorer {
                     value: 'c51'
                 }
             ], { placeHolder: `Select MDK Product Type` });
-    
+
             if (!prod_type)
                 return;
 
@@ -671,6 +678,34 @@ export class OperationExplorer {
 
             const importOpts: ImportOptions = {
                 type: 'iar',
+                projectFile: new File(prjFileUri[0].fsPath),
+                createNewFolder: false
+            };
+
+            // emit event
+            this.emit('request_import_project', importOpts);
+        }
+
+        //
+        // for CMAKE projects
+        //
+        else if (ideType.label == view_str$operation$import_cmake_project) {
+
+            const prjFileUri = await vscode.window.showOpenDialog({
+                openLabel: 'Import',
+                canSelectFolders: false,
+                canSelectFiles: true,
+                canSelectMany: false,
+                filters: {
+                    'CMAKE Project': ['txt']
+                }
+            });
+
+            if (!prjFileUri || prjFileUri.length == 0)
+                return;
+
+            const importOpts: ImportOptions = {
+                type: 'cmake',
                 projectFile: new File(prjFileUri[0].fsPath),
                 createNewFolder: false
             };

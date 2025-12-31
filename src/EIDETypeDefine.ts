@@ -69,7 +69,7 @@ export interface CreateOptions {
     type: ProjectType;
 }
 
-export type ImportProjectIDEType = 'mdk' | 'eclipse' | 'iar';
+export type ImportProjectIDEType = 'mdk' | 'eclipse' | 'iar' | 'cmake';
 
 export interface ImportOptions {
     type: ImportProjectIDEType;
@@ -539,7 +539,7 @@ export class ProjectConfiguration<T extends BuilderConfigData>
                 } else {
                     return i_a - i_b;
                 }
-            } 
+            }
         });
     }
 
@@ -1464,11 +1464,21 @@ export class ProjectConfiguration<T extends BuilderConfigData>
         // convert abspath to relative path before save to file
         eidePrjObj.srcDirs = eidePrjObj.srcDirs.map((path) => this.toRelativePath(path));
 
-        // ignore some 'dynamic' dependence
-        eidePrjObj.dependenceList = eidePrjObj.dependenceList.filter((g) => {
-            return g.groupName !== ProjectConfiguration.BUILD_IN_GROUP_NAME
-                && g.groupName !== ProjectConfiguration.CUSTOM_GROUP_NAME;
-        });
+        // ignore some 'dynamic' dependence, but keep cmake-import
+        eidePrjObj.dependenceList = eidePrjObj.dependenceList
+            .filter((g) => {
+                // Keep non-dynamic groups
+                if (g.groupName !== ProjectConfiguration.BUILD_IN_GROUP_NAME
+                    && g.groupName !== ProjectConfiguration.CUSTOM_GROUP_NAME) {
+                    return true;
+                }
+                // For 'custom' group, filter depList to keep only 'cmake-import'
+                if (g.groupName === ProjectConfiguration.CUSTOM_GROUP_NAME) {
+                    g.depList = g.depList.filter(dep => dep.name === 'cmake-import');
+                    return g.depList.length > 0; // Keep group only if it has cmake-import
+                }
+                return false; // Filter out 'build-in' group
+            });
 
         for (const depGroup of eidePrjObj.dependenceList) {
             for (const dep of depGroup.depList) {
@@ -1608,7 +1618,7 @@ export class WorkspaceConfiguration extends Configuration<WorkspaceConfig> {
             return obj;
         } catch (error) {
             GlobalEvent.log_error(error);
-            GlobalEvent.emit('msg', newMessage('Warning', 
+            GlobalEvent.emit('msg', newMessage('Warning',
                 view_str$prompt$loadws_cfg_failed.replace('{}', this.FILE_NAME)));
             this.isLoadFailed = true;
             return this.GetDefault();

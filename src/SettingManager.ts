@@ -890,4 +890,58 @@ export class SettingManager {
         this.pathCache.delete('C51');
         this._checkStatus['C51'] = false;
     }
+
+    //------------------------------- CMAKE ----------------------------------
+
+    getCmakeExecutablePath(): string {
+        const path = this.getConfiguration().get<string>('CMAKE.ExecutablePath');
+        if (path) {
+            const formatted = this._formatPathForPluginSettings(path);
+            return formatted || 'cmake';
+        }
+        return 'cmake';
+    }
+
+    getCmakeBuildDirectory(): string {
+        return this.getConfiguration().get<string>('CMAKE.DefaultBuildDirectory') || 'build';
+    }
+
+    getCmakeToolchainArguments(): string {
+        return this.getConfiguration().get<string>('CMAKE.ToolchainArguments') || '';
+    }
+
+    getCmakeBuildType(): string {
+        return this.getConfiguration().get<string>('CMAKE.BuildType') || 'Debug';
+    }
+
+    getCmakeGenerator(): string {
+        return this.getConfiguration().get<string>('CMAKE.Generator') || '';
+    }
+
+    getCmakeMakeProgram(): string {
+        const val = this.getConfiguration().get<string>('CMAKE.MakeProgram') || '';
+        if (val) {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                if (fs.statSync(val).isDirectory()) {
+                    const platform = require('./Platform');
+                    const exeSuffix = platform.exeSuffix();
+                    const candidates = [
+                        `ninja${exeSuffix}`,
+                        `make${exeSuffix}`,
+                        `ninja`,
+                        `make`
+                    ];
+                    for (const name of candidates) {
+                        const p = path.join(val, name);
+                        if (fs.existsSync(p)) return p;
+                    }
+                }
+            } catch (error) {
+                // ignore
+            }
+        }
+        return val;
+    }
 }

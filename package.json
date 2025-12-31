@@ -505,6 +505,48 @@
                         "scope": "resource",
                         "markdownDescription": "Any gcc **toolchain prefix**",
                         "default": ""
+                    },
+                    "EIDE.CMAKE.ExecutablePath": {
+                        "type": "string",
+                        "scope": "resource",
+                        "markdownDescription": "%settings.cmake.executable.path%",
+                        "default": "cmake"
+                    },
+                    "EIDE.CMAKE.DefaultBuildDirectory": {
+                        "type": "string",
+                        "scope": "resource",
+                        "markdownDescription": "%settings.cmake.default.build.dir%",
+                        "default": "build"
+                    },
+                    "EIDE.CMAKE.ToolchainArguments": {
+                        "type": "string",
+                        "scope": "resource",
+                        "markdownDescription": "%settings.cmake.toolchain.args%",
+                        "default": ""
+                    },
+                    "EIDE.CMAKE.BuildType": {
+                        "type": "string",
+                        "scope": "resource",
+                        "markdownDescription": "%settings.cmake.build.type%",
+                        "default": "Debug",
+                        "enum": [
+                            "Debug",
+                            "Release",
+                            "RelWithDebInfo",
+                            "MinSizeRel"
+                        ]
+                    },
+                    "EIDE.CMAKE.Generator": {
+                        "type": "string",
+                        "scope": "resource",
+                        "markdownDescription": "%settings.cmake.generator%",
+                        "default": ""
+                    },
+                    "EIDE.CMAKE.MakeProgram": {
+                        "type": "string",
+                        "scope": "resource",
+                        "markdownDescription": "%settings.cmake.make.program%",
+                        "default": ""
                     }
                 }
             }
@@ -786,6 +828,14 @@
             {
                 "command": "_cl.eide.project.source.file.show.dir",
                 "title": "%eide.explorer.show.file.dir%"
+            },
+            {
+                "command": "_cl.eide.project.cmake.refresh",
+                "title": "%eide.project.cmake.refresh%",
+                "icon": {
+                    "dark": "./res/icon/Refresh_16x.svg",
+                    "light": "./res/icon/Refresh_16x.svg"
+                }
             },
             {
                 "command": "_cl.eide.project.source.modify.path",
@@ -1404,6 +1454,16 @@
                     "command": "_cl.eide.project.show_proj_vars",
                     "when": "viewItem == SOLUTION && view == cl.eide.view.projects",
                     "group": "6_group"
+                },
+                {
+                    "command": "_cl.eide.project.cmake.refresh",
+                    "when": "viewItem == SOLUTION_CMAKE && view == cl.eide.view.projects",
+                    "group": "6_group"
+                },
+                {
+                    "command": "_cl.eide.project.cmake.refresh",
+                    "group": "inline",
+                    "when": "viewItem == SOLUTION_CMAKE && view == cl.eide.view.projects"
                 },
                 {
                     "submenu": "_cl.eide.menu/ui/project/export",

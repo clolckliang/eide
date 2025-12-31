@@ -1,25 +1,25 @@
 /*
-	MIT License
+    MIT License
 
-	Copyright (c) 2019 github0null
+    Copyright (c) 2019 github0null
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included in all
-	copies or substantial portions of the Software.
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
 */
 
 import * as vscode from 'vscode';
@@ -30,7 +30,8 @@ import * as NodePath from 'path';
 
 import { HexUploaderType } from "./HexUploader";
 import { SettingManager } from './SettingManager';
-import { txt_install_now, txt_jump2settings,
+import {
+    txt_install_now, txt_jump2settings,
     view_str$prompt$install_tools_by_online,
     view_str$prompt$reload_workspace_to_refresh_env
 } from './StringTable';
@@ -197,6 +198,31 @@ export class ResInstaller {
             no_binaries: no_binaries
         });
 
+        const ninja_res: ToolPlatformInfo = {
+            'win32': {
+                url: 'https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip',
+                zip_type: 'zip',
+                bin_dir: ''
+            },
+            'linux': {
+                url: 'https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-linux.zip',
+                zip_type: 'zip',
+                bin_dir: ''
+            }
+        };
+
+        if (ninja_res[os_plat]) {
+            this.registerTool('Ninja', {
+                resource_name: 'ninja',
+                readable_name: 'Ninja Build System',
+                setting_name: 'CMAKE.MakeProgram',
+                resource_repath_in_pack: `ninja${platform.exeSuffix()}`,
+                url: ninja_res[os_plat].url,
+                zip_type: ninja_res[os_plat].zip_type,
+                no_binaries: no_binaries
+            });
+        }
+
         const r_sdcc_mcs51: ToolPlatformInfo = {
             'win32': {
                 url: 'https://em-ide.com/resource/sdcc-4.5.0-with-binutils-win32.zip',
@@ -306,7 +332,7 @@ export class ResInstaller {
         try {
             if (force)
                 throw Error();
-            if (indexCacheFile.IsFile() && 
+            if (indexCacheFile.IsFile() &&
                 new Date().getTime() < fs.statSync(indexCacheFile.path).mtime.getTime() + (6 * 3600 * 1000))
                 cont = indexCacheFile.Read();
             else

@@ -1,12 +1,10 @@
 {
     "eide.bar.operations": "操作",
     "eide.bar.projects": "EIDE 项目",
-    
     "eide.item.copy": "复制值",
     "eide.item.modify": "修改",
     "eide.item.remove": "移除",
     "eide.item.open": "打开",
-
     "eide.function.show.uuid": "查看 UUID",
     "eide.function.convert.keil.to.sdcc": "将 Keil_C51 寄存器声明转换为 SDCC 格式",
     "eide.function.reload.jlink.dev.list": "重新加载 JLink 芯片信息列表",
@@ -14,7 +12,6 @@
     "eide.function.reinstall.binaries": "重新安装 eide binaries",
     "eide.function.gen_clang_format": "新建 .clang-format 代码格式化配置模板",
     "eide.function.open_libs.yml": "打开lib生成器配置",
-
     "eide.project.show_project_vars": "显示所有可用的项目变量",
     "eide.project.save": "保存项目",
     "eide.project.refresh": "刷新",
@@ -34,24 +31,19 @@
     "eide.project.generate_builder_params": "生成 builder.params",
     "eide.project.debug.start": "启动调试",
     "eide.project.debug.start.attach": "启动调试 (附加)",
-
     "eide.prj.menus.main.static-check": "静态检查",
     "eide.prj.menus.sub.static-check.cppcheck": "执行 Cppcheck",
     "eide.prj.menus.sub.static-check.clear": "清除诊断结果",
-
     "eide.prj.menus.main.export": "导出为 ...",
     "eide.project.export.template": "EIDE 模板",
     "eide.project.export.keil": "Keil 项目",
     "eide.project.export.makefile": "GNU Makefile",
-
     "eide.workspace.build": "构建所有项目",
     "eide.workspace.rebuild": "重新构建所有项目",
     "eide.workspace.open.config": "打开工作区配置",
     "eide.workspace.make.template": "导出工作区为 EIDE 模板",
-
     "eide.operation.open.history": "打开历史记录",
     "eide.operation.clear.history": "清除历史记录",
-
     "eide.explorer.root.add.folder": "添加源文件夹",
     "eide.explorer.root.remove.folder": "移除源文件夹",
     "eide.explorer.root.refresh.folder": "刷新",
@@ -74,40 +66,31 @@
     "eide.explorer.file.compile": "编译",
     "eide.explorer.file.modify.extraArgs": "查看/修改此文件的编译选项",
     "eide.explorer.folder.modify.extraArgs": "查看/修改此文件夹的编译选项",
-
     "eide.source.show_cmsis_config_wizard": "CMSIS Configuration Wizard",
     "eide.source.show.disassembly": "查看反汇编",
-
     "eide.package.install": "安装 CMSIS 芯片支持包",
     "eide.package.install.cmsis": "安装 CMSIS 头文件",
     "eide.package.remove": "卸载芯片支持包",
     "eide.package.select.device": "选择芯片",
     "eide.package.comp.install": "安装组件",
     "eide.package.comp.uninstall": "移除组件",
-
     "eide.builder.switch": "切换编译器",
     "eide.builder.setup-toochain": "设置编译器",
     "eide.builder.setup-toolchain-prefix": "设置编译器前缀",
-
     "eide.flash.switch": "切换烧录器",
     "eide.flash.gen.dbgconf": "生成调试器配置模板",
     "eide.flash.fetch-shell-flasher": "从云端安装 Shell 烧录脚本",
-
     "eide.deps.include.show": "显示所有包含路径",
     "eide.deps.include.add": "添加包含路径",
     "eide.deps.inclib.show": "显示所有库目录",
     "eide.deps.inclib.add": "添加库目录",
     "eide.deps.macro.show": "显示所有宏定义",
     "eide.deps.macro.add": "添加宏定义",
-
     "settings.msys.enable": "确定是否在Windows平台上启用内置的 **MSYS环境和工具**",
-
     "settings.enable.telemetry": "启用遥测功能。我们将收集日志中的信息，帮助改进该扩展的功能",
-
     "settings.builder.jobs": "构建时使用的线程数",
     "settings.builder.extraCommandLine": "构建时 unify_builder 的附加命令行参数",
     "settings.builder.presetEnvVars": "构建时预设的全局环境变量",
-
     "settings.enable.ccache": "决定是否启用 [ccache](https://ccache.dev/) 用于加速大型项目的编译速度",
     "settings.option.show.toolbar.in.editer.title": "在编辑器的标题栏显示工具栏图标",
     "settings.option.show.statusbar": "在状态栏显示工具栏图标",
@@ -116,12 +99,10 @@
     "settings.option.silent_build_or_flash": "当执行构建或烧录时不显示任务面板，直到发生错误",
     "settings.option.use.task.to.build": "使用 vscode 任务执行编译命令",
     "settings.option.insert.extcommands.at.begin": "内置的构建任务将被插入到 `beforeBuildTasks / afterBuildTasks` 之前",
-    
     "settings.repo.use.proxy": "使用代理加速 github 资源下载",
     "settings.template.repo.url": "Github 模板仓库地址, 格式: `<user_name>`/`<repository_name>`/contents/`<directory_path>`（若该仓库为私有，必须提供访问令牌）",
     "settings.cmsispack.repo.url": "Github cmsis 包仓库地址, 格式: `<user_name>`/`<repository_name>`/contents/`<directory_path>`",
     "settings.template.repo.github_token": "为私有的模板仓库指定一个 Github 个人访问令牌，使 eide 可以访问该仓库并从中读取和下载模板",
-
     "settings.serial.def.port": "默认串口名称",
     "settings.serial.show.toolbar": "显示串口工具栏",
     "settings.serial.use.unix.lf": "在串口中使用 Unix 换行符",
@@ -129,43 +110,32 @@
     "settings.serial.data.width": "串口数据宽度",
     "settings.serial.parity": "串口奇偶校验位",
     "settings.serial.stop.bits": "串口停止位",
-
     "settings.keilc51.ini": "Keil C51 `UV4.exe` 或 `TOOLS.INI` 文件路径 [`example: C:\\Keil_v5\\UV4\\UV4.exe`]",
     "settings.iar.stm8.install.folder": "IAR for STM8 安装目录 [`example: D:\\IAR`]",
     "settings.iar.arm.toolchain.install.folder": "IAR ARM C/C++ 编译器根目录 [`example: D:\\IAR_ARM\\arm`]",
     "settings.sdcc.install.folder": "SDCC 安装目录 [`example: C:\\Program Files (x86)\\SDCC`]",
-
     "settings.arm.armcc5.install.folder": "Armcc v5 toolchain 安装目录 [`example: D:\\ac5`]",
     "settings.arm.armcc6.install.folder": "Armcc v6 toolchain 安装目录 [`example: D:\\ac6`]",
     "settings.arm.gcc.install.folder": "GNU Arm Embedded Toolchain 安装目录 [`example: D:\\arm-gcc\\8 2019-q3-update`]",
     "settings.arm.gcc.prefix": "GNU Arm Embedded Toolchain 编译器前缀 [`example: arm-none-eabi-`]",
-
     "settings.arm.llvm.install.folder": "'LLVM Embedded Toolchain For Arm' 的安装目录",
-
     "settings.armcc.ini": "Keil MDK-ARM `UV4.exe` 或 `TOOLS.INI` 文件路径 [`example: C:\\Keil_v5\\UV4\\UV4.exe`]",
     "settings.armcc.convert.axf": "编译完成后将 `.axf` 转换为 `.elf`",
-    
     "settings.mips.gcc.install.folder": "MIPS Toolchain 安装目录 [`example: D:\\mips-mti-elf-mingw64`]",
     "settings.mips.gcc.prefix": "MIPS toolchain 编译器前缀，例如：`mips-mti-elf-`",
-
     "settings.riscv.gcc.install.folder": "RISC-V Toolchain 安装目录 [`example: D:\\xpack-riscv-none-embed-gcc-8.3.0-2.3`]",
     "settings.riscv.gcc.prefix": "RISC-V Toolchain 编译器前缀，例如：`riscv-none-embed-`",
-
     "settings.jlink.install.folder": "JLink 安装目录 [`example: C:\\Program Files (x86)\\SEGGER\\JLink`]",
     "settings.jlink.device.xml": "JLinkDevices.xml 文件路径",
-
     "settings.openocd.install.folder": "OpenOCD.exe 可执行文件路径 [`example: D:\\OpenOCD\\bin\\openocd.exe`]",
     "settings.stlink.install.folder": "`STM32_Programmer_CLI.exe` 或 `ST-LINK Utility: ST-LINK_CLI.exe` 可执行文件路径",
     "settings.stvp.path": "STVP: `STVP_CmdLine.exe` 可执行文件路径",
-    
     "settings.cppcheck.exec.path": "cppcheck.exe 可执行文件路径",
-    
     "settings.option.disable.editor_context.menu": "禁用编辑器上下文菜单",
     "settings.option.disable.explorer_context.menu": "禁用资源浏览器上下文菜单",
     "settings.option.show.source.references": "显示源文件的头文件引用",
     "settings.option.mapView.parser.depth": "显示 *.map.view 时，obj 文件路径的深度限制。大于该深度的 obj 文件将被忽略。设置为0时不限制深度",
     "settings.option.show.output.files": "在项目资源管理器中显示编译输出文件",
-
     "string.eide.startup.walkthroughs": "Embedded IDE 演示",
     "string.eide.startup.walkthroughs.detail": "我们将向您展示如何开始使用 Embedded IDE 。",
     "string.eide.setup.toolchain": "设置编译器路径",
@@ -174,6 +144,12 @@
     "string.eide.start_project.detail": "现在，我们可以创建一个项目 ！\n[新建项目](command:eide.operation.new_project)\n或者导入其他IDE的项目 ！\n[导入项目](command:eide.operation.import_project)",
     "string.eide.open_docs": "了解更多",
     "string.eide.open_docs.detail": "点击链接可以打开主页，也许能帮您了解到更多的用法。\n[Embedded IDE](https://em-ide.com/)",
-
-    "string.eide.project.welcome": "该工作区中没有任何项目！\n[打开项目](command:eide.operation.open_project)\n[新建项目](command:eide.operation.new_project)\n[导入项目](command:eide.operation.import_project)"
+    "string.eide.project.welcome": "该工作区中没有任何项目！\n[打开项目](command:eide.operation.open_project)\n[新建项目](command:eide.operation.new_project)\n[导入项目](command:eide.operation.import_project)",
+    "settings.cmake.executable.path": "CMAKE 可执行文件路径（如果已在系统 PATH 中，可直接填 'cmake'）",
+    "settings.cmake.default.build.dir": "用于生成 compile_commands.json 的默认 CMAKE 构建目录名称",
+    "settings.cmake.toolchain.args": "CMake 附加参数 (例如 -G Ninja)",
+    "settings.cmake.build.type": "CMake 构建类型 (Debug, Release ...)",
+    "settings.cmake.generator": "CMake 生成器 (例如 Ninja, MinGW Makefiles ...)",
+    "settings.cmake.make.program": "CMake 生成器程序路径 (例如 /usr/bin/ninja)",
+    "eide.project.cmake.refresh": "从 CMakeLists.txt 同步"
 }
