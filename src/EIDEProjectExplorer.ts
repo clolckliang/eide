@@ -1051,6 +1051,14 @@ class ProjectDataProvider implements vscode.TreeDataProvider<ProjTreeItem>, vsco
                     ].join(os.EOL)),
                 }, project.getUid());
 
+                if (isCmakeProject) {
+                    // Watch all CMakeLists.txt files in the project directory
+                    const projectRoot = project.GetRootDir().path.replace(/\\/g, '/');
+                    const globPattern = `${projectRoot}/**/CMakeLists.txt`;
+                    console.log('[EIDE DEBUG] Registering CMake watcher with glob:', globPattern);
+                    this.registerCmakeWatcher(project, globPattern);
+                }
+
                 iList.push(cItem);
                 // cache project root item
                 this.treeCache.setTreeItem(project, cItem, true);
@@ -3446,6 +3454,48 @@ class ProjectDataProvider implements vscode.TreeDataProvider<ProjTreeItem>, vsco
         });
 
         this.keilWatchers.set(uid, watcher);
+    }
+
+    private cmakeWatchers: Map<string, vscode.FileSystemWatcher> = new Map();
+
+    private registerCmakeWatcher(project: AbstractProject, cmakePath: string) {
+        const uid = project.getUid();
+
+        // If watcher already exists for this project, skip (singleton per project)
+        if (this.cmakeWatchers.has(uid)) {
+            return;
+        }
+
+        const watchPath = cmakePath.replace(/\\/g, '/');
+        const watcher = vscode.workspace.createFileSystemWatcher(watchPath, true, false, true); // ignore create/delete, watch change
+        watcher.onDidChange(async (e) => {
+            const changedFile = NodePath.basename(e.fsPath);
+            const result = await vscode.window.showInformationMessage(
+                `Detected changes in '${changedFile}'. Do you want to refresh the '${project.GetConfiguration().config.name}' project?`,
+                'Yes', 'No'
+            );
+
+            if (result === 'Yes') {
+                // Find project index in prjList
+                const projectIndex = this.prjList.findIndex(p => p.getUid() === uid);
+                console.log('[EIDE DEBUG] User clicked Yes. projectIndex=', projectIndex);
+                if (projectIndex >= 0) {
+                    // Create a minimal ProjTreeItem for RefreshCmakeProject
+                    const item = new ProjTreeItem(TreeItemType.SOLUTION, {
+                        value: project.getProjectName(),
+                        projectIndex: projectIndex,
+                        contextVal: 'SOLUTION_CMAKE'
+                    }, uid);
+                    console.log('[EIDE DEBUG] Calling RefreshCmakeProject...');
+                    await this.RefreshCmakeProject(item);
+                    console.log('[EIDE DEBUG] RefreshCmakeProject completed.');
+                } else {
+                    console.log('[EIDE DEBUG] ERROR: project not found in prjList!');
+                }
+            }
+        });
+
+        this.cmakeWatchers.set(uid, watcher);
     }
 
     private async runCmakeGenerate(cmakePath: string, projectRoot: string, buildDir: string, extraArgs?: string[], suppressError: boolean = false): Promise<{ success: boolean; isNotFound: boolean; isGeneratorMismatch?: boolean; logParts: string[] }> {

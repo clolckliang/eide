@@ -1451,12 +1451,12 @@
                 },
                 {
                     "submenu": "_cl.eide.menu/ui/project/gen-debug-cfg",
-                    "when": "viewItem == SOLUTION && view == cl.eide.view.projects",
+                    "when": "viewItem == SOLUTION || viewItem == SOLUTION_CMAKE && view == cl.eide.view.projects",
                     "group": "5_group@3"
                 },
                 {
                     "command": "_cl.eide.project.showBuildParams",
-                    "when": "viewItem == SOLUTION && view == cl.eide.view.projects",
+                    "when": "viewItem == SOLUTION || viewItem == SOLUTION_CMAKE && view == cl.eide.view.projects",
                     "group": "5_group@4"
                 },
                 {
@@ -1466,7 +1466,7 @@
                 },
                 {
                     "command": "_cl.eide.project.show_proj_vars",
-                    "when": "viewItem == SOLUTION && view == cl.eide.view.projects",
+                    "when": "viewItem == SOLUTION || viewItem == SOLUTION_CMAKE && view == cl.eide.view.projects",
                     "group": "6_group"
                 },
                 {
@@ -1481,11 +1481,13 @@
                 },
                 {
                     "submenu": "_cl.eide.menu/ui/project/export",
-                    "group": "9_group"
+                    "group": "9_group",
+                    "when": "viewItem == SOLUTION || viewItem == SOLUTION_CMAKE && view == cl.eide.view.projects"
                 },
                 {
                     "submenu": "_cl.eide.menu/ui/project/static-check",
-                    "group": "z_group0@0"
+                    "group": "z_group0@0",
+                    "when": "viewItem == SOLUTION || viewItem == SOLUTION_CMAKE && view == cl.eide.view.projects"
                 },
                 {
                     "command": "_cl.eide.project.source.virtual_folder_add_file",
