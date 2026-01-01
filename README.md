@@ -1,131 +1,71 @@
-# Embedded IDE
+# Embedded IDE Pro
 
-[![](https://img.shields.io/badge/home_page-em--ide.com-blue)](https://em-ide.com/)
-[![](https://img.shields.io/badge/chat-discuss.em--ide.com-orange)](https://discuss.em-ide.com/)
-[![](https://img.shields.io/visual-studio-marketplace/v/CL.eide)](https://marketplace.visualstudio.com/items?itemName=CL.eide)
-[![](https://img.shields.io/visual-studio-marketplace/i/CL.eide)](https://marketplace.visualstudio.com/items?itemName=CL.eide)
-[![](https://img.shields.io/visual-studio-marketplace/stars/CL.eide)](https://marketplace.visualstudio.com/items?itemName=CL.eide&ssr=false#review-details)
+An enhanced version of the popular Embedded IDE extension for VS Code.
 
-***
+## 🚀 Pro Features
 
-## [中文](./README_ZH-CN.md)
+### 1. Advanced CMake Project Support
+Full workflow support for importing and developing CMake projects directly in EIDE.
 
-## Summary 📑
+- **Intelligent Project Import**:
+  - Parses `compile_commands.json` to extract compilation arguments, include paths, macros, and libraries.
+  - Automatically identifies ARM/RISC-V toolchain types.
+  - Supports **Ninja** generator and response file (`@file.rsp`) parsing.
+- **Linker Script Auto-Discovery**:
+  - Extracts `-T` flags from `link.txt`.
+  - Scans project root for `.ld/.lds` files, prioritizing scripts matching "FLASH" (optimized for STM32).
+- **Project Auto-Refresh**:
+  - **Real-time Monitoring**: Automatically watches `CMakeLists.txt` for changes.
+  - **Synchronization**: Syncs include paths, defines, source files, and toolchain paths.
 
-A mcu development environment for `8051/STM8/Cortex-M/MIPS/RISC-V` on VsCode. 
+### 2. Critical Bug Fixes & Improvements (Keil Support)
+Resolved critical issues that prevented successful compilation of imported Keil projects (fixing `L6406E` and `ENOENT` errors).
 
-Provide `8051/STM8/Cortex-M/MIPS/RISC-V` project development, compilation, program flash and other functions.
+- **Fixed Linker Error (L6406E: No space in execution regions)**:
+  - **Scatter File Sync**: Forces conversion of `scatterFilePath` to a project-relative path (rejecting absolute paths) to ensure portability.
+  - **XML Parsing Robustness**: Fixed a bug in `src/KeilXmlParser.ts` where `x2js` returned objects instead of strings for XML attributes, causing memory addresses to parse as `0`. Added `getNodeText` helper for safe value extraction.
+  - **Validation**: Added memory layout validation in `src/EIDEProjectExplorer.ts`. Updates with invalid layouts (all size 0) are ignored with a warning to prevent overwriting valid configurations.
+- **Fixed `spawnSync ENOENT` Error**:
+  - Added strict `fs.existsSync` checks in `src/ToolchainManager.ts` to prevent crashes when querying invalid toolchain paths.
+- **New Feature**: Added "Refresh Keil Project" context menu command for manual synchronization.
 
-Supported Platforms: 
-  - **Windows x64 (>= Windows 10)**
-  - **Linux x64**
-  - **macOS**(Only tested in 'macOS 10.15 x64')
+### 3. Unified Context Menu
+- **Seamless Experience**: Context menu options for CMake projects now match the rich feature set of standard EIDE projects.
+- **Enhanced Capabilities**:
+  - Generate Debugger Config
+  - Show Compiler CommandLine
+  - Show All Project Variables
+  - Export As...
+  - Static Check
 
-![preview](https://docs.em-ide.com/preview.png)
+---
 
-***
+## 📑 Summary
 
-## Features 🎉
+A powerful MCU development environment for `8051/STM8/Cortex-M/MIPS/RISC-V` on VS Code.
 
-* Support 8051, STM8, Cortex-M, MIPS MTI, RISC-V, GCC projects.
-* Support to import KEIL5/IAR/Eclipse projects, support to import 'IAR-STM8, IAR-ARM, Segger Embedded Studio' project source file resource tree.
-* Support for installing standard KEIL chip support packs (only for Cortex-M projects).
-* Provides many project templates for quick start a project.
-* Build, rebuild, support many toolchains (armcc, gcc-arm-none-eabi, llvm-for-arm, riscv-gcc, xxx-gcc, keil_c51, sdcc ...).
-* Program flash, support: jlink, stlink, openocd, pyocd ...
-* ~~Built-in serial port monitor~~ (recommended to use `Serial Monitor` plug-in).
-* Supports static checking projects by using Cppcheck.
-* Automatically generates default debug configurations for debugger plug-in `cortex-debug, STM8-Debug`.
-* Built-in many utility tools, 'CMSIS Config Wizard UI', 'Disassembly view', 'Program resource view'...
-* Built-in implement `C/C++ IntelliSense Provider` for `ms-vscode.cpptools`, **Not Need to** configurate `c_cpp_properties.json` file.
-* Built-in Msys Unix Shell environment.
+**Supported Platforms:**
+- **Windows x64 (>= Windows 10)**
+- **Linux x64**
+- **macOS** (Tested on macOS 10.15 x64)
 
-***
+## 🎉 Core Features
 
-## Quick Start 🏃‍♀️
+* **Wide MCU Support**: 8051, STM8, Cortex-M, MIPS MTI, RISC-V.
+* **Project Imports**: Import KEIL5/IAR/Eclipse projects directly.
+* **Toolchain Support**: armcc, gcc-arm-none-eabi, llvm-for-arm, riscv-gcc, keil_c51, sdcc, and more.
+* **Flasher Support**: J-Link, ST-Link, OpenOCD, PyOCD.
+* **IntelliSense**: Built-in `C/C++ IntelliSense Provider` - no complex `c_cpp_properties.json` configuration needed.
+* **Utility Tools**: CMSIS Config Wizard, Disassembly View, Program Resource View.
 
-1. Install any of the above compilers
+## 🏃‍♀️ Quick Start
 
-2. Open the **Operations** bar of the extension to set the compiler installation path
+1. **Install Compiler**: Install your preferred compiler (GCC, ARMCC, etc.).
+2. **Setup**: Open the **Operations** bar to set the compiler path.
+3. **Start**: Click `New` or `Import` to begin your embedded journey.
 
-3. Click on the `New` or `Import` function in the Operations bar to start your project
+## 🌈 Community & Support
 
-***
-
-## Getting Start 📖
-
-[https://em-ide.com](https://em-ide.com)
-
-***
-
-## Example
-
-- Create A Project By Internal Template
-
-![](https://docs.em-ide.com/img/show/new_prj.gif)
-
-- Build Project
-
-![](https://docs.em-ide.com/img/show/build_prj.gif)
-
-- Flash Project (It failed because there was no connection to the development board, for demonstration purposes only)
-
-![](https://docs.em-ide.com/img/show/flash_prj.gif)
-
-- Show Source File Disassembly Code
-
-![](https://docs.em-ide.com/img/show/show_disasm.gif)
-
-- Program Resource View
-
-![](https://docs.em-ide.com/img/show/show_prj_res.gif)
-
-***
-
-## ChangeLog 📌
-
-[ChangeLog](https://marketplace.visualstudio.com/items/CL.eide/changelog)
-
-***
-
-## Community 🌈
-
-- [Github](https://github.com/github0null/eide/issues)
-
-- [Forum https://discuss.em-ide.com](https://discuss.em-ide.com/)
-
-***
-
-## How to build ?
-
-You can build this project by your self.
-
-> [!IMPORTANT]  
-> The required version of NodeJS is **16** because of some historical reasons for this extension.
-
-1. Install `NodeJS 16` (recommanded v16.20.2). You can use `nvm` to manage your NodeJS.
-   Install `vsce` by `npm install -g cheerio@1.0.0-rc.9 vsce@2.15.0`
-
-2. Clone this repo, Open folder by vscode and then run command: 
-
-   ```shell
-   npm install
-   ```
-
-3. Press `ctrl+shift+b` to show vscode task
-
-   - Use `npm: webpack` to build this extension, and then you can press F5 to debug it.
-
-   - Use `build vsix` to build as a vsix package.
-
-
-> [!NOTE]  
-> There may be syntax errors when opening project source code using VSCode, this is because the project uses an older Version of TypeScript, please press `Ctrl+Shift+P` to execute `TypeScript: Select TypeScript Version...` and select version: `v3.9.x`.
-
-## Sponsor 👍
-
-[Sponsor The Author](https://em-ide.com/sponsor)
-
-Thanks:
-
-![Sponsor List](https://em-ide.com/sponsor_list/image.png)
+This is a fork maintained for enhanced features.
+- [Original Repository](https://github.com/github0null/eide)
+- [Original Homepage](https://em-ide.com)

@@ -1,11 +1,11 @@
 {
-    "name": "eide",
-    "displayName": "Embedded IDE",
-    "publisher": "cl",
+    "name": "eide-pro",
+    "displayName": "Embedded IDE Pro",
+    "publisher": "cl-fork",
     "author": {
-        "name": "cl",
-        "url": "https://github.com/github0null",
-        "email": "github0null@outlook.com"
+        "name": "cl-fork",
+        "url": "",
+        "email": ""
     },
     "keywords": [
         "mcu",
@@ -33,10 +33,10 @@
         "llvm",
         "clang"
     ],
-    "homepage": "https://em-ide.com",
+    "homepage": "",
     "license": "MIT",
-    "description": "A mcu development environment for 8051/AVR/STM8/Cortex-M/MIPS/RISC-V",
-    "version": "3.26.1",
+    "description": "An enhanced MCU development environment for 8051/AVR/STM8/Cortex-M/MIPS/RISC-V",
+    "version": "1.0.0",
     "preview": false,
     "engines": {
         "vscode": "^1.67.0"
@@ -52,19 +52,19 @@
             "description": "We not support virtual workspaces now."
         }
     },
-    "qna": "https://discuss.em-ide.com/t/FAQ",
+    "qna": "",
     "activationEvents": [
         "onStartupFinished"
     ],
     "icon": "res/icon/icon.png",
     "main": "./dist/extension.js",
-    "readme": "https://github.com/github0null/eide/blob/master/README.md",
+    "readme": "./README.md",
     "bugs": {
-        "url": "https://github.com/github0null/eide/issues",
-        "email": "github0null@outlook.com"
+        "url": "",
+        "email": ""
     },
     "repository": {
-        "url": "https://github.com/github0null/eide.git",
+        "url": "https://github.com/cl-fork/eide-pro.git",
         "type": "git"
     },
     "scripts": {
