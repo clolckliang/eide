@@ -578,7 +578,7 @@ class KeilC51 implements IToolchian {
     } {
 
         const objDic: any = {};
-        const secList: string[] = [ 'Size' ];
+        const secList: string[] = ['Size'];
 
         const lines = fs.readFileSync(mapPath).toString().split(/\r\n|\n/);
         for (const line of lines) {
@@ -873,7 +873,7 @@ class SDCC implements IToolchian {
     } {
 
         const objDic: any = {};
-        const secList: string[] = [ 'Size' ];
+        const secList: string[] = ['Size'];
 
         const lines = fs.readFileSync(mapPath).toString().split(/\r\n|\n/);
         let counter = 0;
@@ -1002,7 +1002,7 @@ class SDCC implements IToolchian {
     getInternalDefines<T extends BuilderConfigData>(builderCfg: T, builderOpts: BuilderOptions): utility.CppMacroDefine[] {
 
         const mList: utility.CppMacroDefine[] = [
-            { name: '__SDCC',               value: '1', type: 'var' },
+            { name: '__SDCC', value: '1', type: 'var' },
             { name: '__SDCC_VERSION_MAJOR', value: '4', type: 'var' },
             { name: '__SDCC_VERSION_MINOR', value: '2', type: 'var' },
             { name: '__SDCC_VERSION_PATCH', value: '0', type: 'var' }
@@ -1230,11 +1230,11 @@ class GNU_SDCC_MCS51 implements IToolchian {
     getInternalDefines<T extends BuilderConfigData>(builderCfg: T, builderOpts: BuilderOptions): utility.CppMacroDefine[] {
 
         const mList: utility.CppMacroDefine[] = [
-            { name: '__SDCC',               value: '1', type: 'var' },
+            { name: '__SDCC', value: '1', type: 'var' },
             { name: '__SDCC_VERSION_MAJOR', value: '4', type: 'var' },
             { name: '__SDCC_VERSION_MINOR', value: '5', type: 'var' },
             { name: '__SDCC_VERSION_PATCH', value: '0', type: 'var' },
-            { name: '__SDCC_GNU_AS',        value: '1', type: 'var' }
+            { name: '__SDCC_GNU_AS', value: '1', type: 'var' }
         ];
 
         // code model
@@ -1764,7 +1764,7 @@ class AC5 implements IToolchian {
         const modelData = JSON.parse(fs.readFileSync(modelpath.path).toString());
         // global.microcontroller-cpu.enum
         const mcpu_cmd = modelData['global']['microcontroller-cpu'].command || '';
-        const mcpus    = modelData['global']['microcontroller-cpu'].enum;
+        const mcpus = modelData['global']['microcontroller-cpu'].enum;
         for (let k in mcpus) {
             this.mcpuMap[k] = mcpu_cmd + mcpus[k];
         }
@@ -1827,9 +1827,9 @@ class AC5 implements IToolchian {
         try {
 
             const cfg: ArmBaseBuilderConfigData = <any>builderCfg;
-            const mcpu_id = cfg.cpuType.toLowerCase() + 
+            const mcpu_id = cfg.cpuType.toLowerCase() +
                 ARMCodeBuilder.getFpuSuffix(cfg.cpuType, cfg.floatingPointHardware);
-    
+
             if (this.mcpuMap[mcpu_id]) {
 
                 const result: utility.CppMacroDefine[] = [];
@@ -1859,6 +1859,8 @@ class AC5 implements IToolchian {
                         cmdList.push('--gnu');
                     }
                 }
+
+                if (!fs.existsSync(armccDir)) return [];
 
                 const cmd = `armcc ${cmdList.join(' ')} --list_macros -E - <${platform.osGetNullDev()}`;
                 child_process.execSync(cmd, { cwd: armccDir, encoding: 'utf8' })
@@ -1962,9 +1964,9 @@ class AC6 implements IToolchian {
         // global.microcontroller-fpu.command
         // global.microcontroller-float.command
         const mcpu_cmd = modelData['global']['microcontroller-cpu'].command || '';
-        const mcpus    = modelData['global']['microcontroller-cpu'].enum;
-        const mfpus    = modelData['global']['microcontroller-fpu'].command;
-        const fabis    = modelData['global']['microcontroller-float'].command;
+        const mcpus = modelData['global']['microcontroller-cpu'].enum;
+        const mfpus = modelData['global']['microcontroller-fpu'].command;
+        const fabis = modelData['global']['microcontroller-float'].command;
         for (let k in mcpus) {
             this.mcpuMap[k] = mcpu_cmd + mcpus[k];
             this.mfpuMap[k] = mfpus[k];
@@ -2213,9 +2215,9 @@ class GCC implements IToolchian {
         // global.microcontroller-fpu.command
         // global.microcontroller-float.command
         const mcpu_cmd = modelData['global']['microcontroller-cpu'].command || '';
-        const mcpus    = modelData['global']['microcontroller-cpu'].enum;
-        const mfpus    = modelData['global']['microcontroller-fpu'].command;
-        const fabis    = modelData['global']['microcontroller-float'].command;
+        const mcpus = modelData['global']['microcontroller-cpu'].enum;
+        const mfpus = modelData['global']['microcontroller-fpu'].command;
+        const fabis = modelData['global']['microcontroller-float'].command;
         for (let k in mcpus) {
             this.mcpuMap[k] = mcpu_cmd + mcpus[k];
             this.mfpuMap[k] = mfpus[k];
@@ -2235,7 +2237,7 @@ class GCC implements IToolchian {
 
     getGccFamilyCompilerPathForCpptools(type?: 'c' | 'c++'): string | undefined {
         const gcc = File.from(
-            this.getToolchainDir().path, 'bin', 
+            this.getToolchainDir().path, 'bin',
             this.getToolPrefix() + `${type == 'c++' ? 'g++' : 'gcc'}${platform.exeSuffix()}`);
         return gcc.path;
     }
@@ -2385,12 +2387,12 @@ class GCC implements IToolchian {
         }
 
         return [
-            { name: '__GNUC__'              , value: '10',  type: 'var' },
-            { name: '__GNUC_MINOR__'        , value: '2',   type: 'var' },
-            { name: '__GNUC_PATCHLEVEL__'   , value: '1',   type: 'var' },
-            { name: '__GNUC_STDC_INLINE__'  , value: '1',   type: 'var' },
-            { name: '__thumb__'             , value: '1',   type: 'var' },
-            { name: '__thumb2__'            , value: '1',   type: 'var' },
+            { name: '__GNUC__', value: '10', type: 'var' },
+            { name: '__GNUC_MINOR__', value: '2', type: 'var' },
+            { name: '__GNUC_PATCHLEVEL__', value: '1', type: 'var' },
+            { name: '__GNUC_STDC_INLINE__', value: '1', type: 'var' },
+            { name: '__thumb__', value: '1', type: 'var' },
+            { name: '__thumb2__', value: '1', type: 'var' },
         ];
     }
 
@@ -2519,7 +2521,7 @@ class IARARM implements IToolchian {
 
     getInternalDefines<T extends BuilderConfigData>(builderCfg: T, builderOpts: BuilderOptions): utility.CppMacroDefine[] {
         return [
-            { name: '__ICCARM__', value: '1',  type: 'var' },
+            { name: '__ICCARM__', value: '1', type: 'var' },
         ];
     }
 
@@ -2628,9 +2630,9 @@ class LLVM_ARM implements IToolchian {
         // global.microcontroller-fpu.command
         // global.microcontroller-float.command
         const mcpu_cmd = modelData['global']['microcontroller-cpu'].command || '';
-        const mcpus    = modelData['global']['microcontroller-cpu'].enum;
-        const mfpus    = modelData['global']['microcontroller-fpu'].command;
-        const fabis    = modelData['global']['microcontroller-float'].command;
+        const mcpus = modelData['global']['microcontroller-cpu'].enum;
+        const mfpus = modelData['global']['microcontroller-fpu'].command;
+        const fabis = modelData['global']['microcontroller-float'].command;
         for (let k in mcpus) {
             this.mcpuMap[k] = mcpu_cmd + mcpus[k];
             this.mfpuMap[k] = mfpus[k];
@@ -2652,7 +2654,7 @@ class LLVM_ARM implements IToolchian {
 
     getGccFamilyCompilerPathForCpptools(type?: 'c' | 'c++'): string | undefined {
         const gcc = File.from(
-            this.getToolchainDir().path, 'bin', 
+            this.getToolchainDir().path, 'bin',
             `${type == 'c++' ? 'clang++' : 'clang'}${platform.exeSuffix()}`);
         return gcc.path;
     }
@@ -2777,8 +2779,8 @@ class LLVM_ARM implements IToolchian {
         const lines = fs.readFileSync(mapPath).toString().split(/\r\n|\n/);
 
         let section_offset = -1;
-        let input_offset   = -1;
-        let cur_section    = undefined;
+        let input_offset = -1;
+        let cur_section = undefined;
 
         for (let line of lines) {
             if (section_offset > 0) {
@@ -2851,7 +2853,7 @@ class LLVM_ARM implements IToolchian {
             } else {
                 if (/VMA\s+LMA\s+Size\s+Align\s+Out\s+In\s+Symbol/.test(line)) {
                     section_offset = line.indexOf('Out');
-                    input_offset   = line.indexOf('In');
+                    input_offset = line.indexOf('In');
                 }
             }
         }
@@ -2861,7 +2863,7 @@ class LLVM_ARM implements IToolchian {
         const orders: any = {
             '.text': 0,
             '.data': 1,
-            '.bss' : 2
+            '.bss': 2
         };
         let final_sections = sections.sort((a, b) => {
             const order_a = orders[a] == undefined ? 100 : orders[a];
@@ -3061,9 +3063,9 @@ class LLVM_ARM implements IToolchian {
         }
 
         return [
-            { name: '__GNUC__'              , value: '4',   type: 'var' },
-            { name: '__GNUC_MINOR__'        , value: '2',   type: 'var' },
-            { name: '__GNUC_PATCHLEVEL__'   , value: '1',   type: 'var' }
+            { name: '__GNUC__', value: '4', type: 'var' },
+            { name: '__GNUC_MINOR__', value: '2', type: 'var' },
+            { name: '__GNUC_PATCHLEVEL__', value: '1', type: 'var' }
         ];
     }
 
@@ -3366,7 +3368,7 @@ class MTI_GCC implements IToolchian {
 
     getGccFamilyCompilerPathForCpptools(type?: 'c' | 'c++'): string | undefined {
         const gcc = File.from(
-            this.getToolchainDir().path, 'bin', 
+            this.getToolchainDir().path, 'bin',
             this.getToolPrefix() + `${type == 'c++' ? 'g++' : 'gcc'}${platform.exeSuffix()}`);
         return gcc.path;
     }
@@ -3453,10 +3455,10 @@ class MTI_GCC implements IToolchian {
 
     getInternalDefines<T extends BuilderConfigData>(builderCfg: T, builderOpts: BuilderOptions): utility.CppMacroDefine[] {
         return [
-            { name: '__GNUC__'              , value: '10',  type: 'var' },
-            { name: '__GNUC_MINOR__'        , value: '2',   type: 'var' },
-            { name: '__GNUC_PATCHLEVEL__'   , value: '1',   type: 'var' },
-            { name: '__GNUC_STDC_INLINE__'  , value: '1',   type: 'var' },
+            { name: '__GNUC__', value: '10', type: 'var' },
+            { name: '__GNUC_MINOR__', value: '2', type: 'var' },
+            { name: '__GNUC_PATCHLEVEL__', value: '1', type: 'var' },
+            { name: '__GNUC_STDC_INLINE__', value: '1', type: 'var' },
         ];
     }
 
@@ -3641,7 +3643,7 @@ class RISCV_GCC implements IToolchian {
 
     getGccFamilyCompilerPathForCpptools(type?: 'c' | 'c++'): string | undefined {
         const gcc = File.from(
-            this.getToolchainDir().path, 'bin', 
+            this.getToolchainDir().path, 'bin',
             this.getToolPrefix() + `${type == 'c++' ? 'g++' : 'gcc'}${platform.exeSuffix()}`);
         return gcc.path;
     }
@@ -3728,8 +3730,8 @@ class RISCV_GCC implements IToolchian {
     getInternalDefines<T extends BuilderConfigData>(builderCfg: T, builderOpts: BuilderOptions): utility.CppMacroDefine[] {
 
         if (builderOpts.global) {
-            const arch  = builderOpts.global['arch'] || 'rv32imac';
-            const eabi  = builderOpts.global['abi'] || 'ilp32';
+            const arch = builderOpts.global['arch'] || 'rv32imac';
+            const eabi = builderOpts.global['abi'] || 'ilp32';
             const model = builderOpts.global['code-model'] || 'medlow';
             const compilerArgs = [
                 `-march=${arch}`,
@@ -3744,10 +3746,10 @@ class RISCV_GCC implements IToolchian {
         }
 
         return [
-            { name: '__GNUC__'              , value: '10',  type: 'var' },
-            { name: '__GNUC_MINOR__'        , value: '2',   type: 'var' },
-            { name: '__GNUC_PATCHLEVEL__'   , value: '1',   type: 'var' },
-            { name: '__GNUC_STDC_INLINE__'  , value: '1',   type: 'var' },
+            { name: '__GNUC__', value: '10', type: 'var' },
+            { name: '__GNUC_MINOR__', value: '2', type: 'var' },
+            { name: '__GNUC_PATCHLEVEL__', value: '1', type: 'var' },
+            { name: '__GNUC_STDC_INLINE__', value: '1', type: 'var' },
         ];
     }
 
@@ -3883,7 +3885,7 @@ class AnyGcc implements IToolchian {
 
     getGccFamilyCompilerPathForCpptools(type?: 'c' | 'c++'): string | undefined {
         const gcc = File.from(
-            this.getToolchainDir().path, 'bin', 
+            this.getToolchainDir().path, 'bin',
             this.getToolPrefix() + `${type == 'c++' ? 'g++' : 'gcc'}${platform.exeSuffix()}`);
         return gcc.path;
     }
@@ -3987,10 +3989,10 @@ class AnyGcc implements IToolchian {
         }
 
         return [
-            { name: '__GNUC__'              , value: '10',  type: 'var' },
-            { name: '__GNUC_MINOR__'        , value: '2',   type: 'var' },
-            { name: '__GNUC_PATCHLEVEL__'   , value: '1',   type: 'var' },
-            { name: '__GNUC_STDC_INLINE__'  , value: '1',   type: 'var' },
+            { name: '__GNUC__', value: '10', type: 'var' },
+            { name: '__GNUC_MINOR__', value: '2', type: 'var' },
+            { name: '__GNUC_PATCHLEVEL__', value: '1', type: 'var' },
+            { name: '__GNUC_STDC_INLINE__', value: '1', type: 'var' },
         ];
     }
 
@@ -4022,10 +4024,10 @@ class AnyGcc implements IToolchian {
 
     migrateOptions(options: BuilderOptions) {
 
-        let cflags: string   = options["c/cpp-compiler"]['C_FLAGS'] || '';
+        let cflags: string = options["c/cpp-compiler"]['C_FLAGS'] || '';
         let cxxflags: string = options["c/cpp-compiler"]['CXX_FLAGS'] || '';
         let asmflags: string = options["asm-compiler"]['ASM_FLAGS'] || '';
-        let ldflags: string  = options.linker['LD_FLAGS'] || '';
+        let ldflags: string = options.linker['LD_FLAGS'] || '';
 
         if (options.version == 1) {
             // setup default options

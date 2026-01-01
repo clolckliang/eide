@@ -1,25 +1,25 @@
 /*
-	MIT License
+    MIT License
 
-	Copyright (c) 2019 github0null
+    Copyright (c) 2019 github0null
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included in all
-	copies or substantial portions of the Software.
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
 */
 
 import * as xml2js from 'x2js';
@@ -315,7 +315,7 @@ export interface KeilC51Option extends C51BaseCompileData, ICommonOptions {
     includeFolder: string;
 }
 
-class C51Parser extends KeilParser<KeilC51Option> {
+export class C51Parser extends KeilParser<KeilC51Option> {
 
     TYPE_TAG: ProjectType = 'C51';
 
@@ -686,7 +686,7 @@ class KeilSettingMapper {
 export interface KeilARMOption extends ArmBaseCompileData, ICommonOptions {
 }
 
-class ARMParser extends KeilParser<KeilARMOption> {
+export class ARMParser extends KeilParser<KeilARMOption> {
 
     TYPE_TAG: ProjectType = 'ARM';
 
@@ -739,10 +739,10 @@ class ARMParser extends KeilParser<KeilARMOption> {
                     eideOption.afterBuildTasks = [];
 
                 // keil props
-                const mdk_OutputName: string      = commonOption.OutputName;
+                const mdk_OutputName: string = commonOption.OutputName;
                 const mdk_OutputDirectory: string = File.normalize(commonOption.OutputDirectory || 'Objects');
-                const mdk_CreateHexFile: boolean  = commonOption.CreateHexFile == '1';
-                const mdk_CreateLib: boolean      = commonOption.CreateLib == '1';
+                const mdk_CreateHexFile: boolean = commonOption.CreateHexFile == '1';
+                const mdk_CreateLib: boolean = commonOption.CreateLib == '1';
 
                 // setup env
                 env['KEIL_OUTPUT_DIR'] = mdk_OutputDirectory;
@@ -907,7 +907,7 @@ class ARMParser extends KeilParser<KeilARMOption> {
                 }
 
                 const memInfo: ARMStorageLayout = { RAM: [], ROM: [] };
-                option.storageLayout = memInfo;
+                // option.storageLayout = memInfo; // Defer assignment
 
                 for (let i = 0; i < 5; i++) {
                     memInfo.RAM.push({
@@ -960,37 +960,41 @@ class ARMParser extends KeilParser<KeilARMOption> {
 
                 const chipData = info.OnChipMemories;
 
-                //========================= ROM ==============================
-                memInfo.ROM[0].mem.startAddr = chipData.OCR_RVCT1.StartAddress;
-                memInfo.ROM[0].mem.size = chipData.OCR_RVCT1.Size;
+                if (chipData) {
+                    //========================= ROM ==============================
+                    memInfo.ROM[0].mem.startAddr = this.getNodeText(chipData.OCR_RVCT1?.StartAddress) || '0x0';
+                    memInfo.ROM[0].mem.size = this.getNodeText(chipData.OCR_RVCT1?.Size) || '0x0';
 
-                memInfo.ROM[1].mem.startAddr = chipData.OCR_RVCT2.StartAddress;
-                memInfo.ROM[1].mem.size = chipData.OCR_RVCT2.Size;
+                    memInfo.ROM[1].mem.startAddr = this.getNodeText(chipData.OCR_RVCT2?.StartAddress) || '0x0';
+                    memInfo.ROM[1].mem.size = this.getNodeText(chipData.OCR_RVCT2?.Size) || '0x0';
 
-                memInfo.ROM[2].mem.startAddr = chipData.OCR_RVCT3.StartAddress;
-                memInfo.ROM[2].mem.size = chipData.OCR_RVCT3.Size;
+                    memInfo.ROM[2].mem.startAddr = this.getNodeText(chipData.OCR_RVCT3?.StartAddress) || '0x0';
+                    memInfo.ROM[2].mem.size = this.getNodeText(chipData.OCR_RVCT3?.Size) || '0x0';
 
-                memInfo.ROM[3].mem.startAddr = chipData.OCR_RVCT4.StartAddress;
-                memInfo.ROM[3].mem.size = chipData.OCR_RVCT4.Size;
+                    memInfo.ROM[3].mem.startAddr = this.getNodeText(chipData.OCR_RVCT4?.StartAddress) || '0x0';
+                    memInfo.ROM[3].mem.size = this.getNodeText(chipData.OCR_RVCT4?.Size) || '0x0';
 
-                memInfo.ROM[4].mem.startAddr = chipData.OCR_RVCT5.StartAddress;
-                memInfo.ROM[4].mem.size = chipData.OCR_RVCT5.Size;
+                    memInfo.ROM[4].mem.startAddr = this.getNodeText(chipData.OCR_RVCT5?.StartAddress) || '0x0';
+                    memInfo.ROM[4].mem.size = this.getNodeText(chipData.OCR_RVCT5?.Size) || '0x0';
 
-                //=========================== RAM ===========================
-                memInfo.RAM[0].mem.startAddr = chipData.OCR_RVCT6.StartAddress;
-                memInfo.RAM[0].mem.size = chipData.OCR_RVCT6.Size;
+                    //=========================== RAM ===========================
+                    memInfo.RAM[0].mem.startAddr = this.getNodeText(chipData.OCR_RVCT6?.StartAddress) || '0x0';
+                    memInfo.RAM[0].mem.size = this.getNodeText(chipData.OCR_RVCT6?.Size) || '0x0';
 
-                memInfo.RAM[1].mem.startAddr = chipData.OCR_RVCT7.StartAddress;
-                memInfo.RAM[1].mem.size = chipData.OCR_RVCT7.Size;
+                    memInfo.RAM[1].mem.startAddr = this.getNodeText(chipData.OCR_RVCT7?.StartAddress) || '0x0';
+                    memInfo.RAM[1].mem.size = this.getNodeText(chipData.OCR_RVCT7?.Size) || '0x0';
 
-                memInfo.RAM[2].mem.startAddr = chipData.OCR_RVCT8.StartAddress;
-                memInfo.RAM[2].mem.size = chipData.OCR_RVCT8.Size;
+                    memInfo.RAM[2].mem.startAddr = this.getNodeText(chipData.OCR_RVCT8?.StartAddress) || '0x0';
+                    memInfo.RAM[2].mem.size = this.getNodeText(chipData.OCR_RVCT8?.Size) || '0x0';
 
-                memInfo.RAM[3].mem.startAddr = chipData.OCR_RVCT9.StartAddress;
-                memInfo.RAM[3].mem.size = chipData.OCR_RVCT9.Size;
+                    memInfo.RAM[3].mem.startAddr = this.getNodeText(chipData.OCR_RVCT9?.StartAddress) || '0x0';
+                    memInfo.RAM[3].mem.size = this.getNodeText(chipData.OCR_RVCT9?.Size) || '0x0';
 
-                memInfo.RAM[4].mem.startAddr = chipData.OCR_RVCT10.StartAddress;
-                memInfo.RAM[4].mem.size = chipData.OCR_RVCT10.Size;
+                    memInfo.RAM[4].mem.startAddr = this.getNodeText(chipData.OCR_RVCT10?.StartAddress) || '0x0';
+                    memInfo.RAM[4].mem.size = this.getNodeText(chipData.OCR_RVCT10?.Size) || '0x0';
+                }
+
+                option.storageLayout = memInfo;
             }
         } catch (error) {
             GlobalEvent.emit('msg', ExceptionToMessage(error, 'Warning'));
@@ -999,6 +1003,7 @@ class ARMParser extends KeilParser<KeilARMOption> {
                 contentType: 'string',
                 content: 'Import compile options failed！Please complete the setup manually'
             });
+            console.error(error);
         }
     }
 
@@ -1077,9 +1082,9 @@ class ARMParser extends KeilParser<KeilARMOption> {
                                 const fopts = node?.FileOption?.FileArmAds?.Cads?.VariousControls;
                                 if (fopts) {
                                     const _MiscControls = this.getNodeText(fopts.MiscControls);
-                                    const _Define       = this.getNodeText(fopts.Define);
-                                    const _Undefine     = this.getNodeText(fopts.Undefine);
-                                    const _IncludePath  = this.getNodeText(fopts.IncludePath);
+                                    const _Define = this.getNodeText(fopts.Define);
+                                    const _Undefine = this.getNodeText(fopts.Undefine);
+                                    const _IncludePath = this.getNodeText(fopts.IncludePath);
                                     // ---
                                     const vPath = `${VirtualSource.rootName}/${fGroup.name}/${NodePath.basename(fPath)}`;
                                     if (obj.fileOptions === undefined) obj.fileOptions = {};
@@ -1348,7 +1353,7 @@ class ARMParser extends KeilParser<KeilARMOption> {
             for (const kv of valMap) {
                 if (cpuname.includes(kv[0].toLowerCase())) {
                     devName = kv[1];
-                    vendor  = 'ARM';
+                    vendor = 'ARM';
                     break;
                 }
             }

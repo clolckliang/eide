@@ -181,6 +181,7 @@ export async function activate(context: vscode.ExtensionContext) {
     subscriptions.push(vscode.commands.registerCommand('_cl.eide.project.close', (item) => projectExplorer.Close(item)));
     subscriptions.push(vscode.commands.registerCommand('_cl.eide.project.saveAll', () => projectExplorer.SaveAll()));
     subscriptions.push(vscode.commands.registerCommand('_cl.eide.project.refresh', () => projectExplorer.Refresh()));
+    subscriptions.push(vscode.commands.registerCommand('_cl.eide.project.refreshKeilProject', (item) => projectExplorer.RefreshKeilProject(item)));
     subscriptions.push(vscode.commands.registerCommand('_cl.eide.project.switchMode', (item) => projectExplorer.switchTarget(item)));
     subscriptions.push(vscode.commands.registerCommand('_cl.eide.project.exportAsTemplate', (item) => projectExplorer.ExportProjectTemplate(item)));
     subscriptions.push(vscode.commands.registerCommand('_cl.eide.project.exportXml', (item) => projectExplorer.ExportKeilXml(item)));
@@ -1204,15 +1205,15 @@ async function InitComponents(context: vscode.ExtensionContext): Promise<boolean
         const bar_make = statusBarManager.create('build');
         const bar_flash = statusBarManager.create('flash');
 
-        bar_proj.text    = `EIDE Project: unspecified`;
+        bar_proj.text = `EIDE Project: unspecified`;
         bar_proj.command = `_cl.eide.statusbar.switch-target`;
         bar_proj.tooltip = `Switch target for eide project`;
 
-        bar_make.text    = `$(tools) Build`;
+        bar_make.text = `$(tools) Build`;
         bar_make.command = `_cl.eide.statusbar.build`;
         bar_make.tooltip = `Build eide project`;
 
-        bar_flash.text    = `$(arrow-down) Flash`;
+        bar_flash.text = `$(arrow-down) Flash`;
         bar_flash.command = `_cl.eide.statusbar.flash`;
         bar_flash.tooltip = `Upload binary file to device`;
     }
@@ -1596,7 +1597,7 @@ class EideTerminalProvider implements vscode.TerminalProfileProvider {
 import { FileWatcher } from '../lib/node-utility/FileWatcher';
 import { ToolchainManager, ToolchainName } from './ToolchainManager';
 import {
-    JLinkOptions, JLinkProtocolType, OpenOCDFlashOptions, 
+    JLinkOptions, JLinkProtocolType, OpenOCDFlashOptions,
     PyOCDFlashOptions, STLinkOptions, ProbeRSFlashOptions, STVPFlasherOptions
 } from './HexUploader';
 import { AbstractProject } from './EIDEProject';
@@ -1652,8 +1653,8 @@ class MapViewEditorProvider implements vscode.CustomTextEditorProvider {
 
         // check tool type
         const conf: {
-            tool?: string, 
-            fileName?: string, 
+            tool?: string,
+            fileName?: string,
             compilerName?: string,
             compilerFullName?: string
         } = yaml.parse(viewFile.Read());
@@ -1828,8 +1829,8 @@ class MapViewEditorProvider implements vscode.CustomTextEditorProvider {
                     }
 
                     vInfo.vscWebview.options = {
-			            enableScripts: true
-		            };
+                        enableScripts: true
+                    };
                     vInfo.vscWebview.html = this.genMapViewHtml(vInfo.vscWebview, vInfo.title, lines.join('\n'));
 
                 } catch (error) {
@@ -2044,7 +2045,7 @@ class ExternalDebugConfigProvider implements vscode.DebugConfigurationProvider {
         };
 
         const fmtOpenocdCfgPath = (type: 'interface' | 'target', path: string) => {
-            let cfgpath = path.startsWith('${workspaceFolder}/') 
+            let cfgpath = path.startsWith('${workspaceFolder}/')
                 ? path.replace('${workspaceFolder}/', '')
                 : `${type}/${path}`;
             if (cfgpath && !cfgpath.endsWith('.cfg'))
@@ -2134,7 +2135,7 @@ class ExternalDebugConfigProvider implements vscode.DebugConfigurationProvider {
             // find ST-LINK_gdbserver
             let gdbserverPath: string | undefined;
             if (platform.osType() == 'win32') {
-                const gdbserver = File.from(resManager.getEideToolsInstallDir(), 
+                const gdbserver = File.from(resManager.getEideToolsInstallDir(),
                     'stlink_gdb_server', 'bin', 'ST-LINK_gdbserver.exe');
                 if (!gdbserver.IsFile()) {
                     ResInstaller.instance().setOrInstallTools('stlink_gdb_server', 'Not found ST-LINK_gdbserver.exe');
@@ -2147,7 +2148,7 @@ class ExternalDebugConfigProvider implements vscode.DebugConfigurationProvider {
             // find STM32_Programmer_CLI
             let cubeProgramerPath: string | undefined;
             if (platform.osType() == 'win32') {
-                const cubeProgramerExe = File.from(resManager.getEideToolsInstallDir(), 
+                const cubeProgramerExe = File.from(resManager.getEideToolsInstallDir(),
                     'st_cube_programer', 'bin', 'STM32_Programmer_CLI.exe');
                 if (!cubeProgramerExe.IsFile()) {
                     ResInstaller.instance().setOrInstallTools('STLink', 'Not found STM32_Programmer_CLI.exe');

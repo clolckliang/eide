@@ -151,5 +151,6 @@
     "settings.cmake.build.type": "CMake 构建类型 (Debug, Release ...)",
     "settings.cmake.generator": "CMake 生成器 (例如 Ninja, MinGW Makefiles ...)",
     "settings.cmake.make.program": "CMake 生成器程序路径 (例如 /usr/bin/ninja)",
-    "eide.project.cmake.refresh": "从 CMakeLists.txt 同步"
+    "eide.project.cmake.refresh": "从 CMakeLists.txt 同步",
+    "eide.project.refreshKeilProject": "从 Keil 项目同步"
 }

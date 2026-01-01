@@ -151,5 +151,6 @@
     "settings.cmake.build.type": "CMAKE build type (Debug, Release ...)",
     "settings.cmake.generator": "CMAKE generator (e.g. Ninja, MinGW Makefiles ...)",
     "settings.cmake.make.program": "CMAKE generator make program path (e.g. /usr/bin/ninja)",
-    "eide.project.cmake.refresh": "Refresh from CMakeLists.txt"
+    "eide.project.cmake.refresh": "Refresh from CMakeLists.txt",
+    "eide.project.refreshKeilProject": "Refresh from Keil Project"
 }

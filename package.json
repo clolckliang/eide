@@ -838,6 +838,15 @@
                 }
             },
             {
+                "command": "_cl.eide.project.refreshKeilProject",
+                "title": "%eide.project.refreshKeilProject%",
+                "category": "EIDE",
+                "icon": {
+                    "dark": "./res/icon/Refresh_16x.svg",
+                    "light": "./res/icon/Refresh_16x.svg"
+                }
+            },
+            {
                 "command": "_cl.eide.project.source.modify.path",
                 "title": "%eide.explorer.modify.file.path%"
             },
@@ -1448,7 +1457,12 @@
                 {
                     "command": "_cl.eide.project.showBuildParams",
                     "when": "viewItem == SOLUTION && view == cl.eide.view.projects",
-                    "group": "6_group"
+                    "group": "5_group@4"
+                },
+                {
+                    "command": "_cl.eide.project.refreshKeilProject",
+                    "when": "viewItem == SOLUTION && view == cl.eide.view.projects",
+                    "group": "2_build@5"
                 },
                 {
                     "command": "_cl.eide.project.show_proj_vars",

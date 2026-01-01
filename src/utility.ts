@@ -55,7 +55,7 @@ export function parseCliArgs(cliStr: string): string[] {
     let inQuote = false;
     let curArg = '';
 
-    for(let char_ of cliStr) {
+    for (let char_ of cliStr) {
         // is a "..." start or end
         if (char_ === '"' && (curArg.length === 0 || curArg[curArg.length - 1] !== '\\')) {
             if (inQuote) {
@@ -69,7 +69,7 @@ export function parseCliArgs(cliStr: string): string[] {
             continue; // skip '"'
         }
         // in "..." region
-        if (inQuote)  {
+        if (inQuote) {
             curArg += char_;
         } else { // out "..." region
             if (char_ === ' ' || char_ === '\t') {
@@ -96,7 +96,7 @@ export async function probers_install(cwd?: string) {
     } else if (platform.osType() === 'linux' || platform.osType() === 'darwin') {
         commandLine = `curl --proto '=https' --tlsv1.2 -LsSf https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh`;
     } else {
-        GlobalEvent.emit('msg', newMessage('Warning', 
+        GlobalEvent.emit('msg', newMessage('Warning',
             `Not support installer for '${platform.osType()}' platform ! Please goto https://probe.rs/docs/getting-started/installation/`));
         return;
     }
@@ -292,7 +292,7 @@ export interface CppMacroDefine {
 export class CppMacroParser {
 
     private static regMatchers = {
-        'var' : /^#define (\w+) (.*)$/,
+        'var': /^#define (\w+) (.*)$/,
         'func': /^#define (\w+\([^\)]*\)) (.*)$/
     };
 
@@ -333,10 +333,13 @@ export class CppMacroParser {
 
 export function getGccInternalDefines(gccpath: string, cmds: string[] | undefined): CppMacroDefine[] | undefined {
     try {
+        const cwd = NodePath.dirname(gccpath);
+        if (!fs.existsSync(cwd)) return undefined;
+
         // gcc ... -E -dM - <null
         const cmdArgs = (cmds || []).concat(['-E', '-dM', '-', `<${platform.osGetNullDev()}`]);
         const cmdLine = `${gccpath} ` + cmdArgs.join(' ');
-        const outputs = child_process.execSync(cmdLine, { cwd: NodePath.dirname(gccpath) }).toString().split(/\r\n|\n/);
+        const outputs = child_process.execSync(cmdLine, { cwd: cwd }).toString().split(/\r\n|\n/);
         const results: CppMacroDefine[] = [];
 
         outputs.filter((line) => { return line.trim() !== ''; })
@@ -413,7 +416,7 @@ export function makeTextTable(rows: string[][], headerLines?: string[]): string[
     // make header
     {
         const tableHeader = rows[0];
-    
+
         let header_str: string = '';
         tableHeader.forEach((headerName, idx) => header_str += `| ${headerName.padEnd(colMaxLenList[idx])} `);
 

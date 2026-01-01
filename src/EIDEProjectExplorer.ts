@@ -44,7 +44,7 @@ import {
 } from './EIDETypeDefine';
 import {
     PackInfo, ComponentFileItem, DeviceInfo,
-    getComponentKeyDescription, ArmBaseCompileData, ArmBaseCompileConfigModel,
+    getComponentKeyDescription, ArmBaseCompileData, ArmBaseCompileConfigModel, ARMStorageLayout,
     RiscvCompileData, AnyGccCompileData,
     getRamRomName,
     getRamRomRange
@@ -120,7 +120,7 @@ import {
     parseCliArgs
 } from './utility';
 import { concatSystemEnvPath, DeleteDir, exeSuffix, kill, osType, DeleteAllChildren, userhome, getGlobalState } from './Platform';
-import { KeilARMOption, KeilC51Option, KeilParser, KeilRteDependence } from './KeilXmlParser';
+import { KeilARMOption, KeilC51Option, KeilParser, KeilRteDependence, C51Parser, ARMParser } from './KeilXmlParser';
 import { VirtualDocument } from './VirtualDocsProvider';
 import { ResInstaller } from './ResInstaller';
 import { ExeCmd, ExecutableOption, ExeFile } from '../lib/node-utility/Executable';
@@ -1036,6 +1036,7 @@ class ProjectDataProvider implements vscode.TreeDataProvider<ProjTreeItem>, vsco
                 const isActived = this.activePrjPath === project.getWsPath();
                 const miscInfo = project.GetConfiguration().config.miscInfo;
                 const isCmakeProject = miscInfo && (<any>miscInfo).source_project && (<any>miscInfo).source_project.type === 'cmake';
+                const isKeilProject = miscInfo && ((<any>miscInfo).mdk_project_path || ((<any>miscInfo).source_project && (<any>miscInfo).source_project.type === 'mdk'));
 
                 const cItem = new ProjTreeItem(TreeItemType.SOLUTION, {
                     value: project.getProjectName() + ' : ' + project.getProjectCurrentTargetName(),
@@ -3218,6 +3219,235 @@ class ProjectDataProvider implements vscode.TreeDataProvider<ProjTreeItem>, vsco
         vscode.window.showInformationMessage(view_str$operation$cmake_refresh_done || 'Refresh Successfully');
     }
 
+    public async RefreshKeilProject(element: ProjTreeItem) {
+        const project = this.GetProjectByIndex(element.val.projectIndex);
+        if (!project) return;
+        await this._refreshKeilProjectToConfig(project);
+    }
+
+    private async _refreshKeilProjectToConfig(project: AbstractProject, forceProjectFile?: File) {
+        let projectFile: File | undefined = forceProjectFile;
+        let miscInfo = project.GetConfiguration().config.miscInfo;
+
+        // try get from cache
+        if (!projectFile && miscInfo) {
+            if ((<any>miscInfo).mdk_project_path) {
+                projectFile = new File((<any>miscInfo).mdk_project_path);
+            } else if ((<any>miscInfo).source_project && (<any>miscInfo).source_project.type === 'mdk') {
+                projectFile = new File(project.ToAbsolutePath((<any>miscInfo).source_project.path));
+            }
+        }
+
+        // try search from root
+        if (!projectFile || !projectFile.IsFile()) {
+            const root = project.getProjectRoot();
+            const uvFiles = root.GetList([/\.uvproj[x]?$/i], File.EXCLUDE_ALL_FILTER);
+            if (uvFiles.length === 1) {
+                projectFile = uvFiles[0];
+            } else {
+                // prompt user
+                const uris = await vscode.window.showOpenDialog({
+                    canSelectFiles: true,
+                    defaultUri: vscode.Uri.file(root.path),
+                    filters: { 'Keil Project': ['uvprojx', 'uvproj'] }
+                });
+                if (uris && uris.length > 0) {
+                    projectFile = new File(uris[0].fsPath);
+                } else {
+                    return;
+                }
+            }
+
+            // save to config
+            if (miscInfo == undefined) miscInfo = { uid: project.getUid() };
+            (<any>miscInfo).mdk_project_path = projectFile.path;
+            (<any>miscInfo).source_project = { type: 'mdk', path: project.ToRelativePath(projectFile.path) };
+            project.GetConfiguration().config.miscInfo = miscInfo;
+            // save now
+            project.GetConfiguration().Save();
+        }
+
+        // parse project
+        // we can reuse keilParser from current file context ? 
+        // No, keilParser is instance of KeilParser. 
+        // I need to check if 'keilParser' constant is available globally in this file or I should create new.
+        // It seems 'keilParser' is NOT global. I see 'cmakeParser' used in 'RefreshCmakeProject'. 
+        // 'cmakeParser' seems to be imported or global.
+        // In ImportKeilProject, it uses 'keilParser'. Let's assume it's available or I create it.
+        // Actually, I should check file imports.
+
+        // Assuming keilParser is available or I use `new KeilParser()`? No, KeilParser is abstract.
+        // I need `IarParser` (which handles Keil too? No idt so).
+        // `KeilXmlParser.ts` has `KeilParser`.
+        // `EIDEProjectExplorer.ts` lines 3000+ uses `keilParser`.
+        // Let's assume `keilParser` is available as a variable in the module scope.
+        // If not, I will see error. 
+        // Wait, I should verify. 
+        // But for now I'll write the logic.
+
+        try {
+            const mdk_prod = (<any>miscInfo)?.uid || 'C51';
+            const isC51 = project.getProjectType() === 'C51' || project.getToolchain().name === 'Keil_C51';
+
+            // Instantiate parser
+            let parser: KeilParser<any>;
+
+            // We need to import KeilARMParser/KeilC51Parser. 
+            // Assuming they are exported from KeilXmlParser.
+            // If not, we might need to use a factory function if exists.
+            // Let's assume KeilARMParser and KeilC51Parser are available if I import them.
+            // But I haven't imported them yet. I will add imports in next step.
+
+            if (isC51) {
+                parser = new C51Parser(projectFile);
+            } else {
+                parser = new ARMParser(projectFile);
+            }
+
+            const keilProjInfos = parser.ParseData(); // ParseData returns array
+            const keilProjInfo = keilProjInfos.find(i => i.name === project.GetConfiguration().config.name) || keilProjInfos[0];
+
+            if (!keilProjInfo) {
+                throw new Error('No target parsed from project file');
+            }
+
+            // Update project config
+            const prjConfig = project.GetConfiguration();
+
+            // 1. Virtual Folder (Files)
+            const vFolder: VirtualFolder = {
+                name: VirtualSource.rootName,
+                files: [],
+                folders: []
+            };
+
+            const excludeList: string[] = [];
+
+            keilProjInfo.fileGroups.forEach(group => {
+                const childFolder: VirtualFolder = {
+                    name: group.name,
+                    files: [],
+                    folders: []
+                };
+
+                // Check group disabled ?
+                // Keil file groups usually don't have 'disabled' property in the parser result interface provided?
+                // Step 268 showed fileGroups: FileGroup[].
+                // EIDETypeDefine.ts FileGroup has disabled?: boolean.
+                const groupDisabled = group.disabled === true;
+
+                group.files.forEach(f => {
+                    const relPath = project.ToRelativePath(f.file.path) || f.file.path;
+                    childFolder.files.push({ path: relPath });
+
+                    if (groupDisabled || f.disabled) {
+                        excludeList.push(relPath);
+                    }
+                });
+
+                vFolder.folders.push(childFolder);
+            });
+
+            prjConfig.config.virtualFolder = vFolder;
+
+            const curTargetName = project.GetConfiguration().config.mode;
+            const keilTarget = keilProjInfo; // The result is the target.
+
+            if (keilTarget) {
+                // Update Target Config
+                const targetConfig = prjConfig.config.targets[curTargetName];
+                if (targetConfig) {
+                    if (targetConfig.cppPreprocessAttrs) {
+                        targetConfig.cppPreprocessAttrs.incList = keilTarget.incList || [];
+                        targetConfig.cppPreprocessAttrs.defineList = keilTarget.defineList || [];
+                    } else {
+                        // Create if missing
+                        targetConfig.cppPreprocessAttrs = {
+                            name: 'Preprocessor',
+                            incList: keilTarget.incList || [],
+                            libList: [],
+                            defineList: keilTarget.defineList || []
+                        };
+                    }
+
+                    // Merge exclude list
+                    targetConfig.excludeList = excludeList;
+                }
+            }
+
+            // Save and reload
+            project.GetConfiguration().Save();
+            project.getVirtualSourceManager().load(); // Reload virtual folder from config
+            project.GetDepManager().Refresh(); // Reload dependencies
+            this.UpdateView();
+
+            vscode.window.showInformationMessage('Project Refreshed from: ' + projectFile.name);
+
+            // Register watcher if not exists
+            this.registerKeilWatcher(project, projectFile.path);
+
+            // Sync Scatter File & Storage Layout (For ARM)
+            if (!isC51) {
+                const armOptions = <any>keilTarget.compileOption;
+                const toolConfig = <any>prjConfig.config.toolchainConfig;
+
+                if (armOptions.scatterFilePath !== undefined) {
+                    // convert to relative path
+                    toolConfig.scatterFilePath = project.ToRelativePath(armOptions.scatterFilePath);
+                }
+
+                if (armOptions.useCustomScatterFile !== undefined) {
+                    toolConfig.useCustomScatterFile = armOptions.useCustomScatterFile;
+                }
+
+                if (armOptions.storageLayout) {
+                    const layout = <ARMStorageLayout>armOptions.storageLayout;
+                    let isValid = false;
+                    for (const mem of layout.RAM.concat(<any>layout.ROM)) {
+                        if (parseInt(mem.mem.size) > 0) {
+                            isValid = true;
+                            break;
+                        }
+                    }
+                    if (isValid) {
+                        toolConfig.storageLayout = armOptions.storageLayout;
+                    } else {
+                        vscode.window.showWarningMessage('Warning: Invalid memory layout from Keil project. EIDE will ignore it.');
+                    }
+                }
+            }
+
+
+        } catch (error) {
+            vscode.window.showErrorMessage('Refresh Failed: ' + (<Error>error).message);
+        }
+    }
+
+    private keilWatchers: Map<string, vscode.FileSystemWatcher> = new Map();
+
+    private registerKeilWatcher(project: AbstractProject, keilPath: string) {
+        const uid = project.getUid();
+        // Clear existing for this project to be safe (if path changed)
+        if (this.keilWatchers.has(uid)) {
+            this.keilWatchers.get(uid)?.dispose();
+            this.keilWatchers.delete(uid);
+        }
+
+        const watcher = vscode.workspace.createFileSystemWatcher(keilPath, true, false, true); // ignore create/delete, watch change
+        watcher.onDidChange(async (e) => {
+            const result = await vscode.window.showInformationMessage(
+                `Detected changes in '${NodePath.basename(keilPath)}'. Do you want to refresh the '${project.GetConfiguration().config.name}' project?`,
+                'Yes', 'No'
+            );
+
+            if (result === 'Yes') {
+                this._refreshKeilProjectToConfig(project);
+            }
+        });
+
+        this.keilWatchers.set(uid, watcher);
+    }
+
     private async runCmakeGenerate(cmakePath: string, projectRoot: string, buildDir: string, extraArgs?: string[], suppressError: boolean = false): Promise<{ success: boolean; isNotFound: boolean; isGeneratorMismatch?: boolean; logParts: string[] }> {
         // Execute cmake and collect result
         const executeResult = await vscode.window.withProgress({
@@ -4504,6 +4734,10 @@ export class ProjectExplorer implements CustomConfigurationProvider {
     Refresh() {
         this.dataProvider.clearTreeViewCache();
         this.dataProvider.UpdateView();
+    }
+
+    RefreshKeilProject(item: ProjTreeItem) {
+        this.dataProvider.RefreshKeilProject(item);
     }
 
     Close(item: ProjTreeItem) {
