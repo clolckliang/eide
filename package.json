@@ -1,10 +1,10 @@
 {
     "name": "eide-pro",
     "displayName": "Embedded IDE Pro",
-    "publisher": "cl-fork",
+    "publisher": "clockliang",
     "author": {
-        "name": "cl-fork",
-        "url": "",
+        "name": "clockliang",
+        "url": "https://github.com/clolckliang",
         "email": ""
     },
     "keywords": [
@@ -33,7 +33,7 @@
         "llvm",
         "clang"
     ],
-    "homepage": "",
+    "homepage": "https://github.com/clolckliang/eide-pro",
     "license": "MIT",
     "description": "An enhanced MCU development environment for 8051/AVR/STM8/Cortex-M/MIPS/RISC-V",
     "version": "1.0.1",
@@ -60,11 +60,11 @@
     "main": "./dist/extension.js",
     "readme": "./README.md",
     "bugs": {
-        "url": "",
+        "url": "https://github.com/clolckliang/eide-pro/issues",
         "email": ""
     },
     "repository": {
-        "url": "https://github.com/cl-fork/eide-pro.git",
+        "url": "https://github.com/clolckliang/eide-pro.git",
         "type": "git"
     },
     "scripts": {
